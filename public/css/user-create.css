@@ -1,0 +1,177 @@
+/* =====================================
+   WEBADMIN - ADD USER PAGE
+   Matches provided wireframe
+===================================== */
+
+.user-create-content {
+    padding: 23px;
+    min-height: calc(100vh - 85px);
+    background: #f1f5f9;
+}
+
+/* FORM CARD */
+
+.user-form-card {
+    width: 100%;
+    padding: 18px;
+    border: 1px solid #e3eaf0;
+    border-radius: 10px;
+    background: #ffffff;
+    box-shadow: 0 2px 5px rgba(22, 52, 78, .04);
+}
+
+.user-form-card h2 {
+    margin: 0 0 18px;
+    color: #183d5d;
+    font-size: 15px;
+    font-weight: 700;
+}
+
+/* FORM GRID */
+
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 14px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+
+.form-group label {
+    margin-bottom: 7px;
+    color: #183d5d;
+    font-size: 10px;
+    font-weight: 700;
+}
+
+.form-group input {
+    width: 100%;
+    height: 34px;
+    padding: 0 10px;
+    border: 1px solid #e3eaf0;
+    border-radius: 6px;
+    outline: none;
+    background: #ffffff;
+    color: #183d5d;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 10px;
+    transition: border-color .2s ease;
+}
+
+.form-group input::placeholder {
+    color: #858b95;
+}
+
+.form-group input:focus {
+    border-color: #3486bc;
+    box-shadow: 0 0 0 2px rgba(52, 134, 188, .1);
+}
+
+/* BUTTONS */
+
+.form-actions {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    margin-top: 18px;
+}
+
+.save-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 55px;
+    height: 33px;
+    padding: 0 15px;
+    border: none;
+    border-radius: 6px;
+    background: #245f88;
+    color: #ffffff;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.save-btn:hover {
+    background: #17476b;
+}
+
+.cancel-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 66px;
+    height: 33px;
+    padding: 0 15px;
+    border: 1px solid #e3eaf0;
+    border-radius: 6px;
+    background: #ffffff;
+    color: #183d5d;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 11px;
+    font-weight: 600;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.cancel-btn:hover {
+    background: #f1f5f9;
+}
+
+/* VALIDATION */
+
+.validation-summary {
+    margin-bottom: 16px;
+    padding: 12px 15px;
+    border: 1px solid #f1b9b9;
+    border-radius: 6px;
+    background: #fff5f5;
+    color: #a42b2b;
+    font-size: 12px;
+}
+
+.validation-summary ul {
+    margin: 8px 0 0 18px;
+}
+
+.field-error {
+    margin-top: 5px;
+    color: #dc2626;
+    font-size: 10px;
+}
+
+/* RESPONSIVE */
+
+@media (max-width: 1100px) {
+    .form-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 600px) {
+    .user-create-content {
+        padding: 15px;
+    }
+
+    .user-form-card {
+        padding: 15px;
+    }
+
+    .form-grid {
+        grid-template-columns: 1fr;
+        gap: 15px;
+    }
+
+    .form-group input {
+        height: 39px;
+    }
+
+    .form-actions {
+        margin-top: 20px;
+    }
+}

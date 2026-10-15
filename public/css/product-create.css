@@ -1,0 +1,156 @@
+/* ADD PRODUCT PAGE */
+
+.product-create-content {
+    padding: 30px;
+    background: #f0f4f9;
+    min-height: calc(100vh - 108px);
+}
+
+.product-form-card {
+    background: #ffffff;
+    border: 1px solid #e3eaf2;
+    border-radius: 13px;
+    padding: 30px;
+    box-shadow: 0 4px 12px rgba(25, 58, 95, 0.04);
+}
+
+.product-form-card h2 {
+    font-size: 19px;
+    color: #183b5a;
+    margin: 0 0 8px;
+}
+
+.form-subtitle {
+    font-size: 12px;
+    color: #7b8ca2;
+    margin: 0 0 28px;
+}
+
+.product-form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 22px;
+}
+
+.product-form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+    min-width: 0;
+}
+
+.product-form-group label {
+    font-size: 12px;
+    font-weight: 700;
+    color: #234363;
+}
+
+.product-form-group label span {
+    color: #e43d4b;
+}
+
+.product-form-group input,
+.product-form-group textarea {
+    width: 100%;
+    box-sizing: border-box;
+    border: 1px solid #dce5ee;
+    border-radius: 7px;
+    padding: 12px 13px;
+    background: #fff;
+    color: #253e58;
+    font-size: 13px;
+    font-family: inherit;
+    outline: none;
+}
+
+.product-form-group input {
+    height: 44px;
+}
+
+.product-form-group textarea {
+    resize: vertical;
+    min-height: 110px;
+}
+
+.product-form-group input:focus,
+.product-form-group textarea:focus {
+    border-color: #3488b9;
+    box-shadow: 0 0 0 3px rgba(52, 136, 185, .12);
+}
+
+.product-form-group.full-width {
+    grid-column: 1 / -1;
+}
+
+.field-error {
+    font-size: 11px;
+    color: #d82e3d;
+}
+
+.product-form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    margin-top: 30px;
+    padding-top: 22px;
+    border-top: 1px solid #edf1f6;
+}
+
+.product-cancel-btn,
+.product-save-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px 22px;
+    border-radius: 7px;
+    font-size: 12px;
+    font-weight: 700;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.product-cancel-btn {
+    background: #fff;
+    border: 1px solid #dce5ee;
+    color: #234363;
+}
+
+.product-save-btn {
+    background: #245f88;
+    border: 1px solid #245f88;
+    color: #fff;
+}
+
+.product-save-btn:hover {
+    background: #194a6d;
+}
+
+@media (max-width: 768px) {
+    .product-create-content {
+        padding: 16px;
+    }
+
+    .product-form-card {
+        padding: 20px;
+    }
+
+    .product-form-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .product-form-group.full-width {
+        grid-column: auto;
+    }
+}
+
+@media (max-width: 420px) {
+    .product-form-actions {
+        flex-direction: column-reverse;
+    }
+
+    .product-cancel-btn,
+    .product-save-btn {
+        width: 100%;
+        box-sizing: border-box;
+    }
+}
