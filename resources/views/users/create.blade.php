@@ -39,13 +39,13 @@
             </div>
         </div>
 
-        <nav class="sidebar-nav">
+                <nav class="sidebar-nav" aria-label="Main navigation">
 
             <!-- DASHBOARD -->
             <a href="{{ route('dashboard') }}"
-               class="nav-link">
+               class="nav-link {{ request()->routeIs('dashboard') ? 'active' : '' }}">
 
-                <svg viewBox="0 0 24 24">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
                     <path d="m3 10 9-7 9 7v10H3z"/>
                     <path d="M9 20v-7h6v7"/>
                 </svg>
@@ -53,91 +53,46 @@
                 <span>Dashboard</span>
             </a>
 
-            <!-- USERS -->
-            <div class="nav-group open">
+            <!-- USERS (ADMIN ONLY) -->
+            @if(auth()->user() && auth()->user()->role === 'admin')
+            <a href="{{ route('users.index') }}"
+               class="nav-link {{ request()->routeIs('users.*') ? 'active' : '' }}">
 
-                <button type="button"
-                        class="nav-link nav-toggle active"
-                        aria-expanded="true">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <circle cx="12" cy="7" r="4"/>
+                    <path d="M4 21a8 8 0 0 1 16 0"/>
+                </svg>
 
-                    <svg viewBox="0 0 24 24">
-                        <circle cx="12" cy="7" r="4"/>
-                        <path d="M4 21a8 8 0 0 1 16 0"/>
-                    </svg>
-
-                    <span>Users</span>
-                    <span class="plus">−</span>
-                </button>
-
-                <div class="submenu">
-
-                    <a href="{{ route('users.index') }}"
-                       class="submenu-link">
-                        All Users
-                    </a>
-
-                    <a href="{{ route('users.create') }}"
-                       class="submenu-link selected">
-                        Add User
-                    </a>
-
-                </div>
-            </div>
+                <span>Users</span>
+            </a>
+            @endif
 
             <!-- CUSTOMERS -->
-            <div class="nav-group">
+            <a href="{{ route('customers.index') }}"
+               class="nav-link {{ request()->routeIs('customers.*') ? 'active' : '' }}">
 
-                <button type="button"
-                        class="nav-link nav-toggle"
-                        aria-expanded="false">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <circle cx="9" cy="8" r="3"/>
+                    <circle cx="17" cy="9" r="2"/>
+                    <path d="M3 20a6 6 0 0 1 12 0"/>
+                    <path d="M16 15a5 5 0 0 1 5 5"/>
+                </svg>
 
-                    <svg viewBox="0 0 24 24">
-                        <circle cx="9" cy="8" r="3"/>
-                        <circle cx="17" cy="9" r="2"/>
-                        <path d="M3 20a6 6 0 0 1 12 0"/>
-                        <path d="M16 15a5 5 0 0 1 5 5"/>
-                    </svg>
-
-                    <span>Customers</span>
-                    <span class="plus">+</span>
-                </button>
-
-                <div class="submenu">
-                    <a href="{{ route('customers.index') }}" class="submenu-link">
-                        All Customers
-                    </a>
-                    <a href="{{ route('customers.create') }}" class="submenu-link">
-                        Add Customer
-                    </a>
-                </div>
-            </div>
+                <span>Customers</span>
+            </a>
 
             <!-- PRODUCTS -->
-            <div class="nav-group">
+            <a href="{{ route('products.index') }}"
+               class="nav-link {{ request()->routeIs('products.*') ? 'active' : '' }}">
 
-                <button type="button"
-                        class="nav-link nav-toggle"
-                        aria-expanded="false">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="m12 2 9 5v10l-9 5-9-5V7z"/>
+                    <path d="m3 7 9 5 9-5"/>
+                    <path d="M12 12v10"/>
+                </svg>
 
-                    <svg viewBox="0 0 24 24">
-                        <path d="m12 2 9 5v10l-9 5-9-5V7z"/>
-                        <path d="m3 7 9 5 9-5"/>
-                        <path d="M12 12v10"/>
-                    </svg>
-
-                    <span>Products</span>
-                    <span class="plus">+</span>
-                </button>
-
-                <div class="submenu">
-                    <a href="{{ route('products.index') }}" class="submenu-link">
-                        All Products
-                    </a>
-                    <a href="{{ route('products.create') }}" class="submenu-link">
-                        Add Product
-                    </a>
-                </div>
-            </div>
+                <span>Products</span>
+            </a>
 
         </nav>
 
@@ -269,6 +224,29 @@
                                    required>
 
                             @error('email')
+                                <small class="field-error">
+                                    {{ $message }}
+                                </small>
+                            @enderror
+
+                        </div>
+
+                        <!-- ROLE -->
+                        <div class="form-group">
+
+                            <label for="role">
+                                Role
+                            </label>
+
+                            <select id="role"
+                                    name="role"
+                                    required>
+                                <option value="admin" {{ old('role') === 'admin' ? 'selected' : '' }}>Admin</option>
+                                <option value="manager" {{ old('role') === 'manager' ? 'selected' : '' }}>Manager</option>
+                                <option value="staff" {{ old('role', 'staff') === 'staff' ? 'selected' : '' }}>Staff</option>
+                            </select>
+
+                            @error('role')
                                 <small class="field-error">
                                     {{ $message }}
                                 </small>

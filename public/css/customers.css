@@ -321,3 +321,10 @@
         flex-wrap: wrap;
     }
 }
+
+.view-only-text {
+    color: #8598ad;
+    font-size: 11px;
+    font-weight: 600;
+}
+

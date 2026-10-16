@@ -20,7 +20,8 @@ class UserController extends Controller
             ->when($search !== '', function ($query) use ($search) {
                 $query->where(function ($q) use ($search) {
                     $q->where('name', 'like', '%' . $search . '%')
-                      ->orWhere('email', 'like', '%' . $search . '%');
+                      ->orWhere('email', 'like', '%' . $search . '%')
+                      ->orWhere('role', 'like', '%' . $search . '%');
                 });
             })
             ->orderBy('id')
@@ -41,12 +42,14 @@ class UserController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'email', 'max:255', 'unique:users,email'],
             'password' => ['required', 'confirmed', Password::min(8)],
+            'role' => ['required', 'string', Rule::in(['admin', 'manager', 'staff'])],
         ]);
 
         User::create([
             'name' => $validated['name'],
             'email' => $validated['email'],
             'password' => Hash::make($validated['password']),
+            'role' => $validated['role'],
         ]);
 
         return redirect()->route('users.index')
@@ -73,10 +76,31 @@ class UserController extends Controller
                 'confirmed',
                 Password::min(8),
             ],
+            'role' => ['required', 'string', Rule::in(['admin', 'manager', 'staff'])],
         ]);
+
+        // Prevent demoting the last active administrator
+        if ($user->role === 'admin' && $validated['role'] !== 'admin') {
+            $adminCount = User::where('role', 'admin')->count();
+            if ($adminCount <= 1) {
+                return redirect()
+                    ->back()
+                    ->withInput()
+                    ->with('error', 'The last active administrator cannot be demoted.');
+            }
+        }
+
+        // Prevent an administrator from demoting their own account
+        if (auth()->id() === $user->id && $user->role === 'admin' && $validated['role'] !== 'admin') {
+            return redirect()
+                ->back()
+                ->withInput()
+                ->with('error', 'You cannot change your own administrator role.');
+        }
 
         $user->name = $validated['name'];
         $user->email = $validated['email'];
+        $user->role = $validated['role'];
 
         if (!empty($validated['password'])) {
             $user->password = Hash::make($validated['password']);
@@ -88,28 +112,33 @@ class UserController extends Controller
             ->with('success', 'User updated successfully.');
     }
 
-    
-public function destroy(User $user): RedirectResponse
-{
-    // Prevent deleting your own account
-    if (auth()->id() === $user->id) {
+    public function destroy(User $user): RedirectResponse
+    {
+        // Prevent deleting your own account
+        if (auth()->id() === $user->id) {
+            return redirect()
+                ->route('users.index')
+                ->with('error', 'You cannot delete your own account.');
+        }
+
+        // Prevent deleting the last user
+        if (User::count() <= 1) {
+            return redirect()
+                ->route('users.index')
+                ->with('error', 'The last user cannot be deleted.');
+        }
+
+        // Prevent deleting the last administrator
+        if ($user->role === 'admin' && User::where('role', 'admin')->count() <= 1) {
+            return redirect()
+                ->route('users.index')
+                ->with('error', 'The last active administrator cannot be deleted.');
+        }
+
+        $user->delete();
+
         return redirect()
             ->route('users.index')
-            ->with('error', 'You cannot delete your own account.');
+            ->with('success', 'User deleted successfully.');
     }
-
-    // Prevent deleting the last user
-    if (User::count() <= 1) {
-        return redirect()
-            ->route('users.index')
-            ->with('error', 'The last user cannot be deleted.');
-    }
-
-    $user->delete();
-
-    return redirect()
-        ->route('users.index')
-        ->with('success', 'User deleted successfully.');
-}
-
 }

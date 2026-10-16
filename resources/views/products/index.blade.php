@@ -36,85 +36,60 @@
             </div>
         </div>
 
-        <nav class="sidebar-nav">
+                <nav class="sidebar-nav" aria-label="Main navigation">
 
-            <a href="{{ route('dashboard') }}" class="nav-link">
-                <svg viewBox="0 0 24 24">
+            <!-- DASHBOARD -->
+            <a href="{{ route('dashboard') }}"
+               class="nav-link {{ request()->routeIs('dashboard') ? 'active' : '' }}">
+
+                <svg viewBox="0 0 24 24" aria-hidden="true">
                     <path d="m3 10 9-7 9 7v10H3z"/>
                     <path d="M9 20v-7h6v7"/>
                 </svg>
+
                 <span>Dashboard</span>
             </a>
 
-            <!-- USERS -->
-            <div class="nav-group">
-                <button type="button"
-                        class="nav-link nav-toggle"
-                        aria-expanded="false">
-                    <svg viewBox="0 0 24 24">
-                        <circle cx="12" cy="7" r="4"/>
-                        <path d="M4 21a8 8 0 0 1 16 0"/>
-                    </svg>
-                    <span>Users</span>
-                    <span class="plus">+</span>
-                </button>
+            <!-- USERS (ADMIN ONLY) -->
+            @if(auth()->user() && auth()->user()->role === 'admin')
+            <a href="{{ route('users.index') }}"
+               class="nav-link {{ request()->routeIs('users.*') ? 'active' : '' }}">
 
-                <div class="submenu">
-                    <a href="{{ route('users.index') }}"
-                       class="submenu-link">All Users</a>
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <circle cx="12" cy="7" r="4"/>
+                    <path d="M4 21a8 8 0 0 1 16 0"/>
+                </svg>
 
-                    <a href="{{ route('users.create') }}"
-                       class="submenu-link">Add User</a>
-                </div>
-            </div>
+                <span>Users</span>
+            </a>
+            @endif
 
             <!-- CUSTOMERS -->
-            <div class="nav-group">
-                <button type="button"
-                        class="nav-link nav-toggle"
-                        aria-expanded="false">
-                    <svg viewBox="0 0 24 24">
-                        <circle cx="9" cy="8" r="3"/>
-                        <circle cx="17" cy="9" r="2"/>
-                        <path d="M3 20a6 6 0 0 1 12 0"/>
-                        <path d="M16 15a5 5 0 0 1 5 5"/>
-                    </svg>
-                    <span>Customers</span>
-                    <span class="plus">+</span>
-                </button>
+            <a href="{{ route('customers.index') }}"
+               class="nav-link {{ request()->routeIs('customers.*') ? 'active' : '' }}">
 
-                <div class="submenu">
-                    <a href="{{ route('customers.index') }}" class="submenu-link">All Customers</a>
-                    <a href="{{ route('customers.create') }}" class="submenu-link">Add Customer</a>
-                </div>
-            </div>
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <circle cx="9" cy="8" r="3"/>
+                    <circle cx="17" cy="9" r="2"/>
+                    <path d="M3 20a6 6 0 0 1 12 0"/>
+                    <path d="M16 15a5 5 0 0 1 5 5"/>
+                </svg>
+
+                <span>Customers</span>
+            </a>
 
             <!-- PRODUCTS -->
-            <div class="nav-group open">
-                <button type="button"
-                        class="nav-link nav-toggle active"
-                        aria-expanded="true">
-                    <svg viewBox="0 0 24 24">
-                        <path d="m12 2 9 5v10l-9 5-9-5V7z"/>
-                        <path d="m3 7 9 5 9-5"/>
-                        <path d="M12 12v10"/>
-                    </svg>
-                    <span>Products</span>
-                    <span class="plus">−</span>
-                </button>
+            <a href="{{ route('products.index') }}"
+               class="nav-link {{ request()->routeIs('products.*') ? 'active' : '' }}">
 
-                <div class="submenu">
-                    <a href="{{ route('products.index') }}"
-                       class="submenu-link selected">
-                        All Products
-                    </a>
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="m12 2 9 5v10l-9 5-9-5V7z"/>
+                    <path d="m3 7 9 5 9-5"/>
+                    <path d="M12 12v10"/>
+                </svg>
 
-                    <a href="{{ route('products.create') }}"
-                       class="submenu-link">
-                        Add Product
-                    </a>
-                </div>
-            </div>
+                <span>Products</span>
+            </a>
 
         </nav>
 
@@ -171,12 +146,14 @@
         <main class="products-content">
 
             <!-- ADD PRODUCT BUTTON -->
+            @if(auth()->user() && auth()->user()->role !== 'staff')
             <div class="products-toolbar">
                 <a href="{{ route('products.create') }}"
                    class="add-product-btn">
                     + Add Product
                 </a>
             </div>
+            @endif
 
             <!-- PRODUCTS TABLE -->
             <section class="products-card">
@@ -238,6 +215,7 @@
                                     <td>{{ $product->description ?: '-' }}</td>
 
                                     <td>
+                                        @if(auth()->user() && auth()->user()->role !== 'staff')
                                         <div class="product-actions">
                                             <a href="{{ route('products.edit', $product) }}"
                                                class="product-edit">
@@ -252,6 +230,9 @@
                                                 Delete
                                             </button>
                                         </div>
+                                        @else
+                                        <span class="view-only-text">View only</span>
+                                        @endif
                                     </td>
                                 </tr>
                             @empty
